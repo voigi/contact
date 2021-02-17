@@ -1,6 +1,29 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <p>Nom:<strong>{{ contact.nom }}</strong></p>
-    <p>Prenom:<strong>{{ contact.prenom }}</strong></p>
+    
+  
+       <table class="table table-bordered">
+        <thead>
+            <th>ID</th>
+            <th>Telephone</th>
+        </thead>
+        <tbody>
+        
+            {% for contact in contact.telephone %}
+                    <tr>
+                        <td><a href={{path('contact_detail', {id:contact.id})}}>{{contact.id}}</a></td>
+                        <td>{{ contact.numero }}</td>
+                    </tr>    
+            {% endfor %}
+            </tbody>
+    </table>
+    <div class="card mb-5">
+        <div class="card-header">Ajouter un numero !</div>
+        <div class="card-body">
+            {{ form_start(formulaire) }}
+            {{ form_row(formulaire.numero) }}
+            {{ form_end(formulaire) }}
+        </div>
+    </div>
 {% endblock %}

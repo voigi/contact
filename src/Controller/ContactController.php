@@ -3,7 +3,10 @@
 namespace App\Controller;
 
 use App\Entity\Contact;
+use App\Entity\Groupe;
+use App\Entity\Telephone;
 use App\Form\ContactType;
+use App\Form\TelephoneType;
 use App\Repository\ContactRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -36,7 +39,7 @@ class ContactController extends AbstractController
 			$this->entityManager->persist($contact);
 			$this->entityManager->flush();
 
-			//return $this->redirectToRoute('app_login');
+			return $this->redirectToRoute('home');
 
 			// return $this->redirectToRoute('commentaires_details', ['id' => $commentaire->getId()]);
 		}
@@ -51,6 +54,28 @@ class ContactController extends AbstractController
 	{
 		$contact = $this->contactRepository->find($id);
 
-		return $this->render('contacts\detail.html.twig', ['contact' => $contact, ]);
+		$telephone = new Telephone;
+
+		$telephone->setContact($contact);
+
+		$form = $this->createForm(TelephoneType::class, $telephone);
+		$form->handleRequest($request);
+
+		if ($form->isSubmitted() && $form->isValid()) {
+			$this->entityManager->persist($telephone);
+			$this->entityManager->flush();
+		}
+
+		return $this->render('contacts\detail.html.twig', ['contact' => $contact,  'formulaire' => $form->createView()]);
+	}
+
+	/**
+	 * @Route ("contact/list", name = "contact_list",requirements={"id"="\d+"})
+	 */
+	public function getList(Request $request)
+	{
+		$contactList = $this->contactRepository->findAll();
+
+		return $this->render('contacts\list.html.twig', ['contactList' => $contactList]);
 	}
 }

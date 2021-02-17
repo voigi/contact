@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+    
+  
+       <table class="table table-bordered">
+        <thead>
+            <th>ID</th>
+            <th>Nom</th>
+            <th>Prenom</th>
+        </thead>
+        <tbody>
+          {% for  contact in groupe.contacts %}
+             <tr>
+                <td><a href={{path('contact_detail', {id:contact.id})}}>{{contact.id}}</a></td>
+                <td>{{contact.nom}}</td>
+                <td>{{contact.prenom}}</td>
+             <tr>
+           {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}

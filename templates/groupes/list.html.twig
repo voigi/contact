@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <table class="table table-bordered">
+        <thead>
+            <th>ID</th>
+            <th>Nom</th>
+           
+            
+        </thead>
+        <tbody>
+            {% for groupe in groupeList %}
+                <tr>
+                    <td><a href={{path('detail_groupe', {id:groupe.id})}}>{{groupe.id}}</a></td>
+                    <td>{{ groupe.nom }}</td>
+                    
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% endblock %}

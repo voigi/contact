@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Contact;
 use App\Entity\Groupe;
 use App\Form\GroupeType;
 use App\Repository\GroupeRepository;
@@ -23,9 +24,22 @@ class GroupeController extends AbstractController
 	}
 
 	/**
+	 * @Route ("groupe/{id}", name = "detail_groupe",requirements={"id"="\d+"})
+	 */
+	public function getDetails(Request $request, int $id)
+	{
+		$groupe = $this->groupeRepository->find($id);
+		// foreach ($groupe->getContacts() as $contact) {
+		// 	dump($contact);
+		// }
+
+		return $this->render('groupes\detail.html.twig', ['groupe' => $groupe]);
+	}
+
+	/**
 	 * @Route("groupe/create", name="groupe_create")
 	 */
-	public function create_contact(Request $request)
+	public function create_groupe(Request $request)
 	{
 		$groupe = new Groupe();
 		$form = $this->createForm(GroupeType::class, $groupe);
@@ -35,11 +49,29 @@ class GroupeController extends AbstractController
 			$this->entityManager->persist($groupe);
 			$this->entityManager->flush();
 
-			//return $this->redirectToRoute('app_login');
+			return $this->redirectToRoute('groupe_valide');
 
 			// return $this->redirectToRoute('commentaires_details', ['id' => $commentaire->getId()]);
 		}
 
 		return $this->render('groupes/create.html.twig', ['formulaire' => $form->createView()]);
+	}
+
+	/**
+	* @Route ("groupe/list", name = "groupe_list",requirements={"id"="\d+"})
+	*/
+	public function getList(Request $request)
+	{
+		$groupeList = $this->groupeRepository->findAll();
+
+		return $this->render('groupes\list.html.twig', ['groupeList' => $groupeList]);
+	}
+
+	/**
+	 * @Route("groupe/validate",name ="groupe_valide")
+	 */
+	public function validate_groupe(Request $request)
+	{
+		return $this->render('groupes/validate.html.twig');
 	}
 }
